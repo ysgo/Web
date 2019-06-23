@@ -1,5 +1,4 @@
 # Web Exercise
----
 ## Contents
 - edu = Web Client 실습(Html, CSS, JavaScript)
 - sedu = Web Server 실습(Servlet을 이용)
