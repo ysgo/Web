@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+input {
+    margin: 5px;
+}
+#dropbox {
+    float: left;
+    width: 500px;
+    height: 300px;
+    margin: 10px;
+    border: 1px solid #999999;
+}
+#imgbox {
+    float: left;
+    width: 500px;
+    height: 300px;
+    margin: 10px;
+    border: 1px solid #999999;
+}
+#imgbox > img {
+    float: left;
+    width: 120px;
+    height: 120px;
+    padding: 1px;
+}
+</style>
+</head>
+<body>
+<h1>HTML5로 크리스마스 카드 만들기</h1>
+<button onclick="save()">저장하기</button>
+<button onclick="restore()">읽어오기</button>
+<button onclick="remove()">지우기</button>
+<br>
+배경 칼라 설정 : <input id="background" type="color" onchange="backgroundColor()">
+테두리 칼라 설정 : <input id="border" type="color" onchange="borderColor()"><br>
+메시지 칼라 설정 : <input id="textColor" type="color">
+입력 메시지 : <input id="msg" type="text"><br>
+<section id="dropbox">
+    <canvas id="canvas" width="500" height="300" onclick="displayMsg(window.event)"></canvas>
+</section>
+<section id="imgbox">
+    <img id="image1" src="http://localhost:8000/edu/exam_images/kakao/g36.png">
+    <!-- <img crossorigin="anonymous" id="image2" src="../exam_images/kakao/g11.png">
+    <img crossorigin="anonymous" id="image3" src="../exam_images/kakao/g15.png">
+    <img crossorigin="anonymous" id="image4" src="../exam_images/kakao/g41.png">
+    <img crossorigin="anonymous" id="image5" src="../exam_images/kakao/g42.png">
+    <img crossorigin="anonymous" id="image6" src="../exam_images/kakao/g38.png">
+    <img crossorigin="anonymous" id="image7" src="../exam_images/kakao/g13.png">
+    <img crossorigin="anonymous" id="image8" src="../exam_images/kakao/g26.png"> -->
+</section>
+<script>
+    var context = document.getElementById("canvas");
+    var drop;
+    function initiate(){
+        var images=document.querySelectorAll('#imgbox > img');
+        for(var i=0; i<images.length; i++){
+            images[i].addEventListener('dragstart', dragged, false);
+            images[i].addEventListener('dragend', ending, false);
+        }
+        
+        //drop=document.getElementById('canvas');
+        canvas=context.getContext('2d');
+        
+        context.addEventListener('dragover', function(e){ e.preventDefault(); }, false);
+        context.addEventListener('drop', dropped, false);
+	}
+	function ending(e){
+        elem=e.target;
+        //elem.style.visibility='hidden';
+        //elem.style.display='none';
+        //elem.parentNode.removeChild(elem);
+	}
+	function dragged(e){
+        var elem=e.target;
+        e.dataTransfer.setData('aa', elem.getAttribute('id'));
+        e.dataTransfer.setDragImage(e.target, 0, 0);
+	}
+	function dropped(e){
+        e.preventDefault();
+        var id=e.dataTransfer.getData('aa');
+        var elem=document.getElementById(id);
+        
+        var posx=e.pageX-context.offsetLeft;
+        var posy=e.pageY-context.offsetTop;
+        
+        canvas.drawImage(elem,posx,posy, 80, 80);
+        
+	}
+    window.addEventListener('load', initiate, false);
+    
+    function save() {
+        localStorage.setItem("canvas", context.toDataURL());
+    }
+    function remove() {
+        canvas.clearRect(0, 0, 580, 450);
+    }
+    function restore() {
+        var img = new Image();
+        img.src = localStorage.getItem("canvas");
+        img.onload = function() {
+            canvas.drawImage(img, 0, 0);
+        }
+    }
+    function backgroundColor() {
+        canvas.fillStyle = document.getElementById("background").value;
+        canvas.fillRect(0, 0, 500, 300);
+    }
+    function borderColor() {
+        canvas.strokeStyle = document.getElementById("border").value;
+        canvas.lineWidth = 20;
+        canvas.strokeRect(0, 0, 500, 300);
+    }
+    function displayMsg(e) {
+        var x = e.offsetX;
+        var y = e.offsetY;
+        var msg = document.getElementById("msg").value;
+        var message = context.getContext('2d');
+        message.fillStyle = document.getElementById("textColor").value;
+        message.font = '30pt D2';
+        message.fillText(msg, x, y);
+    }
+    </script>
+</body>
+</html>
