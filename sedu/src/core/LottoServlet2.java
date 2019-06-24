@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import vo.LottoResultVO;
+import model.vo.LottoResultVO;
 
 @WebServlet("/lotto2")
 public class LottoServlet2 extends HttpServlet {

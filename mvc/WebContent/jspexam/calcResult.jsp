@@ -10,6 +10,7 @@
 <h1>연산 요청 결과</h1>
 <hr>
 <h3>결과 : <%= request.getAttribute("result") %></h3>
-<a href="/mvc/htmlexam/calcForm.html">입력화면</a>
+<h3>결과 : ${ result }</h3>
+<a href="<%= request.getHeader("referer") %>">입력화면</a>
 </body>
 </html>

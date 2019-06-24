@@ -27,7 +27,7 @@ public class VisitorServlet extends HttpServlet {
 				year + "년 " + month + "월 " + day + "일에 남긴 글입니다.</h2>");
 		out.print("<hr>");  
 		out.print("<p>" + request.getParameter("opinion") + "</p><br>");
-		//out.print("<a href='http://ip주소/sedu/html/visitorForm.html'>입력화면으로</a>");
+		//out.print("<a href='http://localhost:8000/sedu/html/visitorForm.html'>입력화면으로</a>");
 		out.print("<button onclick=\"location.href='/sedu/html/visitorForm.html'\">입력화면으로</button>");
 		out.close();
 	}

@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-// html에서 Servlet 서버로 쿼리를 전달받아 JSON 변환후 응답하는 소스
+
 @WebServlet("/basket1")
 public class BasketServlet1 extends HttpServlet {
 	private static final long serialVersionUID = 1L;

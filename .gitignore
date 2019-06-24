@@ -5,6 +5,8 @@
 ### Exclude Folder ###
 Servers/
 .vscode/
+img/
+
 
 ### Exclude Dynamic Web Project Folder&File ###
 build/
@@ -14,6 +16,13 @@ images/
 *.db
 exam_images/
 .gitignore
+*.png
+*.jpg
+*.gif
+*.jpeg
+*.mp3
+*.mp4
+*.ogg
 
 ### Eclipse ###
 .metadata

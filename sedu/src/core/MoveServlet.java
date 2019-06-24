@@ -15,12 +15,13 @@ public class MoveServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html; charset=utf-8");
 		String query = request.getParameter("action");
-		PrintWriter out = response.getWriter();
-		if(query == null)
+		if(query == null) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
 			out.print("<h2>전달된 쿼리 문자열이 없어서 MoveServlet이 직접 응답합니당..</h2>");
-		else {
+			out.close();
+		} else {
 			if(query.equals("naver"))
 				response.sendRedirect("http://www."+ query + ".com/");
 			else if(query.equals("daum"))

@@ -9,4 +9,4 @@ function writeColor(content, tag, color) {
 }
 function writeNewLine(content) {
 	document.write(content + "<br>");
-} 
+}

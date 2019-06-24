@@ -9,7 +9,6 @@
 </head>
 <body>
 <!--QueryTestServlet 서블릿 소스를 JSP로 변환하는 실습 1 -->
-<!--queryForm.html에서 form 태그의 action 속성값 경로 재지정 필수 -->
 <h1>JSP 실습 - 1</h1>
 <hr>
 <% String day = null; %>
