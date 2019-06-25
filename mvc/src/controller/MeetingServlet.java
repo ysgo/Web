@@ -23,7 +23,8 @@ public class MeetingServlet extends HttpServlet {
 //		System.out.println(action + " " + id + " " + keyword);
 		MeetingJDBCDAO dao = new MeetingJDBCDAO();
 		if(keyword == null) {
-			if(action.equals("delete")) {
+//			if(keyword == null && action.equals("delete")) {
+			if(action != null) {
 				boolean result = dao.delete(Integer.parseInt(id));
 				if(result) {
 					request.setAttribute("msg",  "글 성공적 삭제");
@@ -44,6 +45,7 @@ public class MeetingServlet extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		String action = request.getParameter("action");
 		String name = request.getParameter("name");
 		String title = request.getParameter("title");
 		String date = request.getParameter("meetingDate");
@@ -52,11 +54,21 @@ public class MeetingServlet extends HttpServlet {
 		vo.setName(name);
 		vo.setTitle(title);
 		vo.setMeetingDate(date);
-		boolean result = dao.insert(vo);
-		if(result) {
-			request.setAttribute("msg", name+"님의 글이 성공적으로 입력되었습니다.");
+		if(action.equals("insert")) {
+			boolean result = dao.insert(vo);
+			if(result) { 
+				request.setAttribute("msg", name+"님의 글이 성공적으로 입력되었습니다.");
+			} else {
+				request.setAttribute("msg", name+"님의 글이 입력에 실패하였습니다.");
+			}			
 		} else {
-			request.setAttribute("msg", name+"님의 글이 입력에 실패하였습니다.");
+			vo.setId(Integer.parseInt(action));
+			boolean result = dao.update(vo);
+			if(result) {
+				request.setAttribute("msg", name+"님의 글이 성공적으로 수정되었습니다.");
+			} else {
+				request.setAttribute("msg", name+"님의 글이 수정에 실패하였습니다.");
+			}
 		}
 		request.setAttribute("list", dao.listAll());
 		request.getRequestDispatcher("/jspexam/meetingView2.jsp").forward(request, response);

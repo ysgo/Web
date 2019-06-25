@@ -34,11 +34,12 @@ td:nth-child(3) {
 	<td class='<%= vo.getId() %>'><%= vo.getName() %></td>
 	<td class='<%= vo.getId() %>'><%= vo.getTitle() %></td>
 	<td class='<%= vo.getId() %>'><%= vo.getMeetingDate() %></td>
-	<td class='<%= vo.getId() %>'><a href='/mvc/meeting?action=delete&id=<%= vo.getId() %>'>
+	<td><a href='/mvc/meeting?action=delete&id=<%= vo.getId() %>'>
 		<img src="/mvc/images/delete.png" width="30"></a>
 	</td>
-	<td class='<%= vo.getId() %>'><a href='/mvc/meeting?action=update&id=<%= vo.getId() %>'>
-		<img src="/mvc/images/edit.png" width="30"></a>
+	<td>
+		<img onclick="displayUpdateForm('<%= vo.getId() %>')" 
+				src="/mvc/images/edit.png" width="30">
 	</td>
 	</tr>
 <%
@@ -68,13 +69,29 @@ function displayDiv(type) {
 		document.getElementById("search").style.display='block';
 	}
 }
+function displayUpdateForm(cv) {
+	var doms = document.getElementsByClassName(cv);
+	document.getElementById("write").style.display='block';
+	document.getElementById("m_name").value=doms[0].textContent;
+	document.getElementById("m_title").vaule=doms[1].textContent;
+
+	var str = doms[2].textContent;
+	var ary = str.split(/\D+/g);
+	var meeting_dt = ary[0] + "-" + ary[1] + "-" + ary[2] + "T" + ary[3] + ":" + ary[4];
+	document.getElementById("m_dt").value = meeting_dt;
+	document.getElementById("divT").textContent="미팅정보 수정";
+	document.querySelector("#write [type=submit]").value="수정";
+	document.querySelector("#write [type=hidden]").value=cv;
+}
 </script>
 <div id="write" style="display:none">
+	<hr><h2 id="divT">미팅정보 작성</h2>
 	<form method="post" action="/mvc/meeting">
-		미팅 대상 이름 : <input type="text" name="name"><br>
-		날짜와 시간 : <input type="datetime-local" name="meetingDate"><br>
+		<input type="hidden" name="action" value="insert">
+		미팅 대상 이름 : <input id="m_name" type="text" name="name"><br>
+		날짜와 시간 : <input id="m_dt" type="datetime-local" name="meetingDate"><br>
 		미팅 목적 : <br>
-		<textarea name="title" rows="5" cols="40"></textarea><br>
+		<textarea id="m_title" name="title" rows="5" cols="40"></textarea><br>
 		<input type="submit" value="등록">
 		<input type="reset" value="재작성">
 	</form>
@@ -88,10 +105,10 @@ function displayDiv(type) {
 	<button onclick="schedule()">미팅 스케쥴 보기</button>
 </form>
 </div>
-<div id="update">
+<!-- <div id="update">
 <form method="get" action="/mvc/meeting">
 	<button>수정하기</button>
 </form>
-</div>
+</div> -->
 </body>
 </html>

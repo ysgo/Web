@@ -126,7 +126,7 @@ public class MeetingJDBCDAO implements MeetingDAO {
 		try(Connection conn = DriverManager.getConnection
 			("jdbc:oracle:thin:@localhost:1521:xe", "jdbctest", "jdbctest");
 			PreparedStatement pstmt = conn.prepareStatement
-					("update meeting set name=?, title=?, meetingdate=to_date(?, 'yyyy-mm-dd hh24:mi) where id = ?")) {			
+					("update meeting set name=?, title=?, meetingdate=to_date(?, 'yyyy-mm-dd hh24:mi') where id = ?")) {			
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getTitle());
 			pstmt.setString(3, vo.getMeetingDate().replace('T', ' '));
