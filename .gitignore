@@ -12,7 +12,7 @@ img/
 build/
 META-INF/
 images/
-*.xml
+# *.xml #
 *.db
 exam_images/
 .gitignore
@@ -109,7 +109,7 @@ local.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar #
 *.war
 *.nar
 *.ear
