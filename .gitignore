@@ -6,6 +6,7 @@
 Servers/
 .vscode/
 img/
+target/
 
 
 ### Exclude Dynamic Web Project Folder&File ###
