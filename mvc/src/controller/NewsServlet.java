@@ -21,8 +21,7 @@ public class NewsServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		String key = request.getParameter("search");
 		String searchType = request.getParameter("searchType");
-		System.out.println(searchType);
-		System.out.println(key);
+		String listwriter = request.getParameter("listwriter");
 		NewsDAO dao = new NewsDAO();
 		if(action != null) {
 			if(id != null && action.equals("delete")) {
@@ -34,12 +33,9 @@ public class NewsServlet extends HttpServlet {
 				}
 				request.setAttribute("list", dao.listAll());
 			} else if(action.equals("search")) {
-				List<NewsVO> list = dao.search(key, searchType);
-				if(list.size() == 0) {
-					request.setAttribute("msg", id+"값과 일치하는 글이 없음");
-				} else {
-					request.setAttribute("list", list);
-				}
+					request.setAttribute("list", dao.search(key, searchType));
+			} else if(action.equals("listwriter")) {
+				request.setAttribute("list", dao.listWriter(listwriter));
 			}
 		} else {
 			if(id != null)
@@ -57,7 +53,6 @@ public class NewsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
-		String id = request.getParameter("id");
 		String writer = request.getParameter("writer");
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
@@ -75,7 +70,6 @@ public class NewsServlet extends HttpServlet {
 			}
 		} else {
 			vo.setId(Integer.parseInt(action));
-			System.out.println(vo.getId());
 			boolean result = dao.update(vo);
 			if(result) {
 				request.setAttribute("msg", writer+"님 게시글 수정 성공");

@@ -44,7 +44,7 @@ public class NewsDAO {
 		boolean result = true;
 		Connection conn = connectDB();
 		try(PreparedStatement pstmt = conn.prepareStatement
-			("insert into news values(news_seq.nextval, ?, ?, ?, to_date(sysdate, 'yyyy-mm-dd'), ?)");) {			
+			("insert into news values(news_seq.nextval, ?, ?, ?, sysdate, ?)");) {			
 			pstmt.setString(1, vo.getWriter());
             pstmt.setString(2, vo.getTitle());
             pstmt.setString(3, vo.getContent());
@@ -61,7 +61,7 @@ public class NewsDAO {
 		boolean result = true;
 		Connection conn = connectDB();
 		try(PreparedStatement pstmt = conn.prepareStatement
-			("update news set writer=?, title=?, content=?, writedate=to_date(sysdate, 'yyyy-mm-dd'), cnt=? where id = ?");) {			
+			("update news set writer=?, title=?, content=?, writedate=sysdate, cnt=? where id = ?");) {			
 			pstmt.setString(1, vo.getWriter());
 			pstmt.setString(2, vo.getTitle());
 			pstmt.setString(3, vo.getContent());
@@ -136,15 +136,37 @@ public class NewsDAO {
 		return vo;
 	}
 	public List<NewsVO> listWriter(String writer) {
-			
-			return null;
+		Connection conn = connectDB();
+		ArrayList<NewsVO> list = new ArrayList<NewsVO>();
+		NewsVO vo;
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(
+					"select id, writer, title, content, to_char(writedate, 'yyyy-mm-dd'), cnt from news where writer like '%"
+							+ writer + "%'");
+			while (rs.next()) {
+				vo = new NewsVO();
+				vo.setId(rs.getInt(1));
+				vo.setWriter(rs.getString(2));
+				vo.setTitle(rs.getString(3));
+				vo.setContent(rs.getString(4));
+				vo.setWritedate(rs.getString(5));
+				vo.setCnt(rs.getInt(6));
+				list.add(vo);
+			}
+			close(conn, stmt, rs);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());// TODO: handle exception
+		}
+		return list;
 	}
 	public List<NewsVO> search(String key, String searchType) {
 		List<NewsVO> list = new ArrayList<>();
 		Connection conn = connectDB();
 		try(Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery
-				("select id, title, writer, to_char(writeDate, 'yyyy-mm-dd') from news where " + searchType + " like '%" + key + "%'");) {
+				("select id, title, writer, to_char(writedate, 'yyyy-mm-dd'), content, cnt from news where "
+				+ searchType + " like '%" + key + "%'");) {
 			NewsVO vo;
 				while(rs.next()) {
 					vo = new NewsVO();
@@ -153,9 +175,10 @@ public class NewsDAO {
 					vo.setWriter(rs.getString(3));
 					vo.setWritedate(rs.getString(4));
 					vo.setContent(rs.getString(5));
+					vo.setCnt(rs.getInt(6));
 					list.add(vo);
 				}
-				close(conn, null, null);
+				close(conn, stmt, rs);
 			} catch(SQLException e) {
 				e.printStackTrace();
 			}

@@ -49,7 +49,8 @@ td:nth-child(3) {
 		<td class='<%=vo.getId() %>'>
 		<a href="/mvc/news?select=true&id=<%=vo.getId()%>&title=<%=vo.getTitle()%>
 		&writer=<%=vo.getWriter()%>&content=<%=vo.getContent()%>"><%= vo.getTitle() %></a></td>
-		<td class='<%=vo.getId() %>'><%= vo.getWriter() %></td>
+		<td class='<%=vo.getId() %>'>
+		<a href="/mvc/news?action=listwriter&listwriter=<%=vo.getWriter()%>"><%= vo.getWriter() %></a></td>
 		<td class='<%=vo.getId() %>'><%= vo.getWritedate() %></td>
 		<td class='<%=vo.getId() %>'><%= vo.getCnt() %></td>
 		<td style="display:none" class='<%=vo.getId() %>'><%= vo.getContent() %></td>		
@@ -63,20 +64,22 @@ td:nth-child(3) {
 %>
 </div>
 <form method="GET" action="/mvc/news">
+<input type="hidden" name="action" value="search">
 <select name="searchType">
-	<option value="num">번호</option>
+	<option selected value="id">번호</option>
 	<option value="title">제목</option>
 	<option value="writer">작성자</option>
-	<option value="writeTime">작성일</option>
-	<option value="numView">조회수</option>
+	<option value="writedate">작성일</option>
+	<option value="cnt">조회수</option>
 </select>
 <input type="text" name="search">
 <input type="submit" value="뉴스검색">
 </form>
 <input type="button" value="뉴스 홈" onclick="location.href='/mvc/news'">
 <input type="submit" value="뉴스작성" onclick="writeNews()">
+
 <div id="write" style="display:none">
-	<h2>뉴스 내용</h2>
+	<h2>뉴스 작성</h2>
 	<form method="POST" action="/mvc/news">
 		<input type="hidden" name="action" value="insert">
 		<input type="text" id="m_writer" name="writer"  placeholder="작성자명을 입력해주세요">
@@ -110,7 +113,7 @@ td:nth-child(3) {
 		<br>
 		<input id="first" type="button" value="확인" onclick="selectNews(null)">
 		<input id="second" type="submit" value="수정">
-		<input id="third" type="button" value="삭제" onclick='selectNews(<%=request.getParameter("id")%>)'>
+		<input id="third" type="button" value="삭제" onclick="selectNews(<%=request.getParameter("id")%>)">
 	</form>
 </div>
 <%
