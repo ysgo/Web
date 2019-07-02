@@ -27,9 +27,9 @@ public class NewsServlet extends HttpServlet {
 			if(id != null && action.equals("delete")) {
 				boolean result = dao.delete(Integer.parseInt(id));
 				if(result) {
-					request.setAttribute("msg", "글 작성 성공");
+					request.setAttribute("msg", "글 삭제 성공");
 				} else {
-					request.setAttribute("msg", "글 작성 실패");				
+					request.setAttribute("msg", "글 삭제 실패");				
 				}
 				request.setAttribute("list", dao.listAll());
 			} else if(action.equals("search")) {
@@ -41,11 +41,11 @@ public class NewsServlet extends HttpServlet {
 			if(id != null)
 				dao.update(dao.listOne(Integer.parseInt(id)));
 			List<NewsVO> list = dao.listAll();
-			if(list.size() == 0) {
-				request.setAttribute("msg", id+"값과 일치하는 글이 없음");
-			} else {
+//			if(list.size() == 0)
+//				request.setAttribute("msg", id+"값과 일치하는 글이 없음");
+//			} else {
 				request.setAttribute("list", list);
-			}
+//			}
 		}
 		request.getRequestDispatcher("/jspexam/news.jsp").forward(request, response);
 	}

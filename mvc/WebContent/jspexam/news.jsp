@@ -9,23 +9,45 @@
 <style>
 body {
 	text-align:center;
+    font-family: '맑은 고딕' 돋움;
+    font-size:1.3em; 
+    color:#333;
 }
 table {
-	margin-left: 27%;
-	margin-right: 27%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1%;
+	border-collapse: collapse;
 }
 td, th {
+	padding: 10px;
 	border-bottom: 1px dotted green;
+}
+th {
+	background-color: gray;
+}
+td {
+	color: purple;
 }
 tr:hover {
 	backgroiund-color: yellow;
 	font-weight: bold;
 }
-td:nth-child(3) {
+td:nth-child(3) { 
 	width: 300px;
 }
+a {
+	color: purple;
+	text-decoration: none;
+}
+input {
+	margin: 5px;
+}
+select {
+	height: 25px; 
+} 
 </style>
-</head>
+</head>	
 <body>
 <div id="view_div">
 <% 
@@ -35,11 +57,11 @@ td:nth-child(3) {
 <h1>뉴스 게시판</h1>
 <table>
 	<tr>
-		<th style="color:blue">번호</th>
-		<th style="color:red">제목</th>
-		<th style="color:pink">작성자</th>
-		<th style="color:orange">작성일</th>
-		<th style="color:green">조회수</th>
+		<th>번호</th>
+		<th>제목</th>
+		<th>작성자</th>
+		<th>작성일</th>
+		<th>조회수</th>
 	</tr>
 <%
 	for(NewsVO vo : list) {
@@ -72,7 +94,7 @@ td:nth-child(3) {
 	<option value="writedate">작성일</option>
 	<option value="cnt">조회수</option>
 </select>
-<input type="text" name="search">
+<input type="text" name="search" size="25">
 <input type="submit" value="뉴스검색">
 </form>
 <input type="button" value="뉴스 홈" onclick="location.href='/mvc/news'">
@@ -82,11 +104,11 @@ td:nth-child(3) {
 	<h2>뉴스 작성</h2>
 	<form method="POST" action="/mvc/news">
 		<input type="hidden" name="action" value="insert">
-		<input type="text" id="m_writer" name="writer"  placeholder="작성자명을 입력해주세요">
+		<input required type="text" id="m_writer" name="writer"  placeholder="작성자명을 입력해주세요">
 		<br>	
-		<input type="text" id="m_title" name="title" placeholder="제목을 입력해주세요">
+		<input required type="text" id="m_title" name="title" placeholder="제목을 입력해주세요">
 		<br>	
-		<textarea id="m_content" name="content" placeholder="내용을 입력해주세요"></textarea>
+		<textarea required id="m_content" name="content" placeholder="내용을 입력해주세요"></textarea>
 		<br>
 		<input id="first" type="submit" value="저장">
 		<input id="second" type="reset" value="재작성">
