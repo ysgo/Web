@@ -6,12 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body style="text-align : center">
-<H1>${ name } - Introducing characters.</H1>
-<hr>
-<img src='/springedu/resources/images/${ imgname }.jpg'>
+<body>
+<h1>${ msg }</h1>
 </body>
 </html>
-
-
-

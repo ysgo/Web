@@ -6,12 +6,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body style="text-align : center">
-<H1>${ name } - Introducing characters.</H1>
+<body>
+<h2>친구 정보</h2>
 <hr>
-<img src='/springedu/resources/images/${ imgname }.jpg'>
+<h3>전화 번호 : ${ friend.phoneNum }</h3>
+<h3>이름 : ${ friend.name }</h3>
 </body>
 </html>
-
-
-

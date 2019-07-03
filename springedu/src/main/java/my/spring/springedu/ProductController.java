@@ -35,19 +35,4 @@ public class ProductController {
 		mav.setViewName("productView");
 		return mav;
 	}
-//	@ModelAttribute("product")
-//	public ProductVO prodMethod() {
-//		return new ProductVO();
-//	}
-//	public String pro(@ModelAttribute("product")ProductVO product, String pid, SessionStatus s) {
-//		if (pid == null) {
-//			s.setComplete();
-//			return "productResult";
-//		}
-//		if (pid.equals("p001")) product.setApple(1);
-//		else if (pid.equals("p002")) product.setBanana(1); 
-//		else product.setHalabong(1);
-//		return "productView";
-//	}
-
 }
