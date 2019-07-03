@@ -2,7 +2,9 @@
 function initialize() {
 		graph1.width = document.getElementById('gr1').offsetWidth;
 		graph1.height = document.getElementById('gr1').offsetHeight;
-}
+		graph2.width = document.getElementById('gr2').offsetWidth;
+		graph2.height = document.getElementById('gr2').offsetHeight;
+	}
 initialize();
 
 // 그래프 1 데이터
@@ -10,19 +12,23 @@ var graphInfo1 = {
 		title: "주요 도시 연평균 미세먼지 농도",
 		max: 35,
 		data: [
-			{cith: "서울", range: 23, color: "#fe802c"},
-			{cith: "부산", range: 26, color: "#ffd100"},
-			{cith: "대구", range: 26, color: "#81d733"},
-			{cith: "인천", range: 29, color: "#666666"},
-			{cith: "광주", range: 26, color: "#43cbff"},
-			{cith: "대전", range: 28, color: "#3183c2"},
-			{cith: "진주", range: 25, color: "#d4155b"},
+			{city: "서울", range: 23, color: "#fe802c"},
+			{city: "부산", range: 26, color: "#ffd100"},
+			{city: "대구", range: 26, color: "#81d733"},
+			{city: "인천", range: 29, color: "#666666"},
+			{city: "광주", range: 26, color: "#43cbff"},
+			{city: "대전", range: 28, color: "#3183c2"},
+			{city: "진주", range: 25, color: "#d4155b"}
 		]
 }
+var graphInfo2 = [
+	{title: "North", range: 64, color: "#43cbff"},
+	{title: "South", range: 39, color: "#81d733"}
+]
 
 // 그래프 1 그리기
 function drawGraph1() {
-	var ctc = graph1.getContext("2d");
+	var ctx = graph1.getContext("2d");
 	var data = graphInfo1;
 	
 	//초기 설정--------------
@@ -31,10 +37,10 @@ function drawGraph1() {
 	
 	// 타이틀
 	ctx.beginPath();
-	ctx.fillStyle = "balck";
+	ctx.fillStyle = "black";
 	ctx.font = "14px Arial";
 	ctx.textAlign = "center";
-	ctx.textBaseLine = "alphabetic";
+	ctx.textBaseline = "alphabetic";
 	ctx.fillText(data.title, graph1.width / 2, 35);
 	
 	//눈금선 ----------------------------
@@ -74,3 +80,38 @@ function drawGraph1() {
 	}
 }
 drawGraph1();
+
+// 그래프2 그리기
+function drawGraph2(){
+	var ctx = graph2.getContext("2d");
+	var data = graphInfo2;
+
+	ctx.beginPath();
+	ctx.lineWidth = 20;
+	for(var i = 0; i < graphInfo2.length; i++){
+		var x = (graph2.width / 2) * i + 100;
+		var y = 140;
+		ctx.font = "24px Arial";
+		ctx.textAlign = "center";
+		ctx.textBaseline = "alphabetic";
+		ctx.fillText(graphInfo2[i].title, x, y - 95);
+
+		ctx.font = "24px Arial";
+		ctx.textBaseline = "middle";
+		ctx.fillText(graphInfo2[i].range + "%", x, y);
+		ctx.moveTo(x + 60, y);
+
+		ctx.beginPath();
+		ctx.arc(x, y, 60, 0, 2 * Math.PI);
+		ctx.strokeStyle = "rgba(0, 0, 0, 0.05)";
+		ctx.stroke();
+		ctx.closePath();
+
+		ctx.beginPath();
+		ctx.arc(x, y, 60, -0.5 * Math.PI, (graphInfo2[i].range / 100) * Math.PI);
+		ctx.strokeStyle = graphInfo2[i].color;
+		ctx.stroke();
+		ctx.closePath();
+	}
+}
+drawGraph2();

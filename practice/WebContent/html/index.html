@@ -17,6 +17,7 @@
     </ul>
 </div>
 </header>
+
 <nav>
 <div class="container">
     <ul class="leftMenu">
@@ -46,6 +47,7 @@
     </ul>
 </div>
 </nav>
+
 <section id="section1">
 <div class="container">
     <div class="leftBox">
@@ -53,7 +55,7 @@
             <!--그래프1추가-->
             <canvas id="graph1"></canvas>
         </div>
-        <div class="graph2">
+        <div class="graph2" id="gr2">
             <!--그래프2추가-->
             <canvas id="graph2"></canvas>
         </div>
@@ -61,16 +63,59 @@
     <div class="rightBox">
         <div class="imgBox">
             <!--이미지 추가-->
-            <img src="" alt="">
+            <img src="../images/03.jpg" alt="">
         </div>
         <div class="table">
             <!--테이블 추가-->
-            
+            <table>
+                <caption>미세먼지 농도</caption>
+						<thead>
+							<tr>
+								<th colspan="2">예보구간</th>
+								<th class="blue">좋음</th>
+								<th class="green">보통</th>
+								<th class="yellow">약간나쁨</th>
+								<th class="orange">나쁨</th>
+								<th class="red" colspan="2">매우나쁨</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td colspan="2">예측 농도</td>
+								<td>0~30</td>
+								<td>31~80</td>
+								<td>81~120</td>
+								<td>121~200</td>
+								<td>201~300</td>
+								<td>301 ~</td>
+							</tr>
+							<tr>
+								<td rowspan="2">행동 요령</td>
+								<td>노약자</td>
+								<td></td>
+								<td></td>
+								<td>장시간 실외 활동 가급적 자제</td>
+								<td>무리한 실외활동 자제요청 (특히 호흡기, 심질환자, 노약자)</td>
+								<td>실외활동 제한</td>
+								<td>실내생활</td>
+							</tr>
+							<tr>
+								<td>일반</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>장시간 무리한 실외활동 자제</td>
+								<td>실외활동 자제</td>
+								<td>실외활동 자제</td>
+							</tr>
+						</tbody>
+            </table>
         </div>
     </div>
 </div>
 </section>
 <div class="clear"></div>
+
 <footer>
     <div class="top">
         <div class="container">
@@ -91,6 +136,6 @@
         </div>
     </div>
 </footer>
-<script src="js/app.js"></script>
+<script src="../js/app.js"></script>
 </body>
 </html>
