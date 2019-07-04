@@ -26,7 +26,7 @@
 	</c:forEach>
 	</table>
 </c:if>
-<c:if test="${ empty msg }">
+<c:if test="${ !empty msg }">
 	<h2>${msg}</h2>
 </c:if>
 <hr>
