@@ -1,4 +1,4 @@
-package mybatis;
+package board.mybatis;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -90,7 +90,7 @@ public class BoardManager {
 	
 	public static int deleteBoard(int seq, String storPass) {
 		SqlSession session = sqlMapper.openSession();
-		Map<String, Object> map  = new HashMap<>();
+		Map<String, Object> map  = new HashMap<String, Object>();
 		System.out.println("seq : storPass = " + seq + ":" + storPass);
 		map.put("seq", seq);
 		map.put("storPass", storPass);

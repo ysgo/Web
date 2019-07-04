@@ -3,7 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
 <!--  별명지정(중복만 안되면 됨)  -->    
-<mapper namespace="hunit.mybatis.boardMapper">
+<mapper namespace="board.mybatis.boardMapper">
  
  <!-- resultType:sqlmapConfig.xml에서 알리아스설정때문에 간단히씀 -->
 <!--  select 시작 -->

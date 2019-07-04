@@ -61,8 +61,7 @@ body {
 		<tr>
 			<td colspan="2">
 			<div align="center">
-				<input type="submit" value="Center">
-				<input type="reset" value="등록">
+				<input type="submit" value="등록">
 				<input type="button" value="뒤로" onclick="move('Board_List.jsp');">
 			</div>
 			</td>
