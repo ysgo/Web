@@ -1,6 +1,6 @@
 package controller;
 /*
- * Spring MVC Mybatis를 이용한 구현방법 * 
+ * Dynamic Web Project MVC 패턴에서 JSTL을  이용한 구현방법 
  */
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,17 +11,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.dao.VisitorMybatisDAO;
+import model.vo.VisitorDAO;
 import model.vo.VisitorVO;
 
-@WebServlet("/visitor")
-public class VisitorServletDB extends HttpServlet {
+@WebServlet("/visitor2")
+public class VisitorServletDB2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String keyword = request.getParameter("keyword");
 		String id = request.getParameter("id");
-		VisitorMybatisDAO dao = new VisitorMybatisDAO();
+		VisitorDAO dao = new VisitorDAO();
 		if(id != null) {
 			boolean result = dao.delete(Integer.parseInt(id));
 			if(result) {
@@ -31,7 +31,7 @@ public class VisitorServletDB extends HttpServlet {
 		} else if(keyword == null) {
 			request.setAttribute("list", dao.listAll());
 		} else {
-			ArrayList<VisitorVO> list = (ArrayList<VisitorVO>) dao.search(keyword);
+			ArrayList<VisitorVO> list = dao.search(keyword);
 			if(list.size() == 0) {
 				request.setAttribute("msg", keyword+"를 담고있는 글이 없습니다");
 			} else {
@@ -46,7 +46,7 @@ public class VisitorServletDB extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		String name = request.getParameter("name");
 		String memo = request.getParameter("opinion");
-		VisitorMybatisDAO dao = new VisitorMybatisDAO();
+		VisitorDAO dao = new VisitorDAO();
 		VisitorVO vo = new VisitorVO();
 		vo.setName(name);
 		vo.setMomo(memo);

@@ -1,6 +1,6 @@
 package controller;
 /*
- * Spring MVC Mybatis를 이용한 구현방법 * 
+ * Dynamic Web Project MVC 패턴에서 JSTL을  이용한 구현방법 
  */
 import java.io.IOException;
 import java.util.List;
@@ -11,19 +11,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.dao.MeetingMyBatisDAO;
+import model.vo.MeetingJDBCDAO;
 import model.vo.MeetingVO;
 
-@WebServlet("/meeting")
-public class MeetingServlet extends HttpServlet {
+
+@WebServlet("/meeting2")
+public class MeetingServlet2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String keyword = request.getParameter("keyword");
 		String id = request.getParameter("id");
 		String action = request.getParameter("action");
 //		System.out.println(action + " " + id + " " + keyword);
-		MeetingMyBatisDAO dao = new MeetingMyBatisDAO();
-//		MeetingJDBCDAO dao = new MeetingJDBCDAO();
+		MeetingJDBCDAO dao = new MeetingJDBCDAO();
 		if(keyword == null) {
 //			if(keyword == null && action.equals("delete")) {
 			if(action != null) {
@@ -51,12 +51,12 @@ public class MeetingServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String title = request.getParameter("title");
 		String date = request.getParameter("meetingDate");
-		MeetingMyBatisDAO dao = new MeetingMyBatisDAO();
+		MeetingJDBCDAO dao = new MeetingJDBCDAO();
 		MeetingVO vo = new MeetingVO();
 		vo.setName(name);
 		vo.setTitle(title);
 		vo.setMeetingDate(date);
-		if(action!=null &&action.equals("insert")) {
+		if(action.equals("insert")) {
 			boolean result = dao.insert(vo);
 			if(result) { 
 				request.setAttribute("msg", name+"님의 글이 성공적으로 입력되었습니다.");
