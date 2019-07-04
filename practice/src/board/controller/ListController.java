@@ -19,11 +19,11 @@ public class ListController {
 	@Resource(name="boardService")
 	private BoardService boardService;
 	
-	/*  서비스 주입이 잘되는지 테스트하는 코드
+	/*  서비스 주입이 잘되는지 테스트하는 코드*/
     public void setBoardService(BoardService boardService){
         System.out.println(boardService + " 서비스 주입 확인");
         this.boardService = boardService;
-    } */
+    }
     
     @RequestMapping(value="/boardList.action")
     public ModelAndView list(@RequestParam(required=false) Integer nowPage,

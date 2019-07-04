@@ -6,6 +6,16 @@
   <packaging>war</packaging>
   <name>Practice Web Project</name>
   <description>Various Project</description>
+  
+      <dependencies>
+  <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.0.2.RELEASE</version>
+</dependency>
+</dependencies>
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>

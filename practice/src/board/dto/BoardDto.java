@@ -12,7 +12,7 @@ public class BoardDto {
 	private String ip;
 	private String regdate;
 	private int pos;
-	private int dpeth;
+	private int depth;
 	public int getSeq() {
 		return seq;
 	}
@@ -79,10 +79,10 @@ public class BoardDto {
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
-	public int getDpeth() {
-		return dpeth;
+	public int getDepth() {
+		return depth;
 	}
-	public void setDpeth(int dpeth) {
-		this.dpeth = dpeth;
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}	
 }

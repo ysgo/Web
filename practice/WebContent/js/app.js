@@ -115,3 +115,28 @@ function drawGraph2(){
 	}
 }
 drawGraph2();
+
+
+// 팝업기능 자바스크립트
+var slideIndex=0;
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+function showDivs(n) {
+  var i;
+  slideIndex = n;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length} ;
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+  document.getElementById("back").style.display = "block";
+  document.getElementById("popup").style.display = "block"; 
+} 
+
+function closePopup(){
+	document.getElementById("back").style.display = "none";
+    document.getElementById("popup").style.display = "none";
+}

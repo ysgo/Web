@@ -1,4 +1,4 @@
-package mybatis;
+package board.mybatis;
 
 import javax.annotation.Resource;
 

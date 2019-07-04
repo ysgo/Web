@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import board.dto.BoardDto;
-import mybatis.BoardManager;
+import board.mybatis.BoardManager;
 
 public class BoardDaoImpl implements BoardDao {
 
