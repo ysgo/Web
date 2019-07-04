@@ -18,7 +18,7 @@ public class MeetingController  {
 		ModelAndView mav = new ModelAndView();
 		if (vo.getName() != null && vo.getMeetingDate() != null 
 				     && vo.getTitle() != null) {
-			if(action != null && action.equals("insert")) {
+			if(action != null && action.equals("insert") || action == null) {
 				boolean result = dao.insert(vo);
 				if(result) {
 					mav.addObject("msg", "성공적으로 저장되었어요.");
