@@ -57,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
 	public void replyUpPos(BoardDto board) {
 		boardDao.replyUpPos(board);
 	}
-	// 페이지 기능 구현 
+	// 페이지 기능 구현 (페이징 처리)
 	@Override
 	public PageDto pagingProc(int nowPage, int nowBlock, int totalRecord) {
 		int numPerPage = 5;

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" isELIgnored="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,61 +13,62 @@ body {
 }
 </style>
 <script>
-	function move(url) {
-		location.href=url;
-	}
-	function boardViewCheck() {
-		var form = document.BoardViewForm;
-		return true;
-	}
+function list(){
+    document.list.action="boardList.action";
+     document.list.submit();
+ } 
 </script>
 </head>
 <body>
-	<form name="BoardViewForm" method="POST">
-	<table summary="전체 테이블 구성">
-		<tr>
-			<td><div align="center"><h3><b>글 읽기</b></h3></div></td>
-		</tr>
-		<tr>
-			<td colspan=2>
-			<table border="1" summary="목록 테이블 구성">
-		<tr>
-			<td align=center>작성자</td>
-			<td align=center>누구</td>
-			<td align=center>작성일</td>
-			<td align=center>2019/06/30</td>
-		</tr>
-		<tr>
-			<td align=center>E-mail</td>
-			<td align=center>nugu@google.com</td>
-			<td align=center>홈페이지</td>
-			<td><a href="http://hunit.tistory.com" target="_new">http://hunit.tistory.com</a></td>
-		</tr>
-		<tr>
-			<td align=center>제목</td>
-			<td colspan=3>게시판 글입니다</td>
-		</tr>
-		<tr>
-			<td colspan=4><br>가나다라마바사<br></td>
-		</tr>
-		<tr>
-			<td colspan=4 align=right>조회수 : </td>
-		</tr>
-			</table>
-			</td>
-		</tr>
-		<tr>
-			<td align="center" colspan=2>
-			<hr size=1>
-			<div align="center">
-			[ <input type="button" value="목록" onclick="move('Board_List.jsp');"> |
-			<input type="button" value="수정" onclick="move('Board_Update.jsp');"> |
-			<input type="button" value="답변" onclick="move('Board_Reply.jsp');"> |
-			<input type="button" value="삭제" onclick="move('Board_Delete.jsp');">]<br>
-			</div>
-			</td>
-		</tr>
-	</table>
-	</form>
+<!--     <form name="BoardViewForm" method="post"> -->
+    <table summary="전체 테이블 구성" style="width:600; height:400; cellpadding:5; cellspacing:0">
+    <tr>
+        <td ><div align="center"><h3><b>글 읽기</b></h3></div></td>
+    </tr>
+    <tr>
+        <td colspan=2>
+        <table border="1" summary="목록 테이블 구성"> 
+    <tr> 
+        <td align=center bgcolor=#dddddd width=20%> 작성자</td>
+        <td bgcolor=#ffffe8 width=30%>${dto.name}</td>
+        <td align=center bgcolor=#dddddd width=15%> 작성일</td>
+        <td bgcolor=#ffffe8 width=50%>${dto.regdate }</td>
+    </tr>
+    <tr>
+        <td align=center bgcolor=#dddddd> E-mail </td>
+        <td bgcolor=#ffffe8 >${dto.email }</td> 
+        <td align=center bgcolor=#dddddd> 홈페이지 </td>
+        <td bgcolor=#ffffe8><a href="http://${dto.homepage}" target="_new">http://${dto.homepage}</a></td> 
+    </tr>
+    <tr> 
+        <td align=center bgcolor=#dddddd> 제 목</td>
+        <td bgcolor=#ffffe8 colspan=3>${dto.title}</td>
+   </tr>
+   <tr> 
+        <td colspan=4><br>${dto.content }<br></td>
+   </tr>
+   <tr>
+        <td colspan=4 align=right> 조회수  : ${dto.count}</td>
+   </tr>
+    </table>
+    </td>
+     </tr>
+    <tr>
+        <td align=center colspan=2> 
+        <hr size=1>
+        <div align="center">
+        [ <a href="javascript:list()">목 록</a> | 
+            <a href="boardUpdate.action?seq=${dto.seq}">수 정</a> |
+            <a href="boardReply.action?seq=${dto.seq}">답 변</a> |
+            <a href="boardDelete.action?seq=${dto.seq}">삭 제 </a>]<br>
+        </div>
+        </td>
+    </tr>
+    </table>
+    <form name="list" method="post">
+        <input type="hidden" name="seq" value="${dto.seq}">
+        <input type="hidden" name="keyField" value="${keyField}">
+        <input type="hidden" name="keyWord" value="${keyWord}">
+    </form>
 </body>
 </html>
