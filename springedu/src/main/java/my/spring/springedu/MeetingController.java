@@ -7,12 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import dao.MeetingDAO;
+import dao.MeetingMyBatisDAO;
 import vo.MeetingVO;
 @Controller
 public class MeetingController  {
 	@Autowired
-	MeetingDAO dao;
+	MeetingMyBatisDAO dao;
 	@RequestMapping("/meeting")
 	protected ModelAndView select(MeetingVO vo, String keyword, String action) {
 		ModelAndView mav = new ModelAndView();
