@@ -1,15 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- <%@ page import = "vo.NewsVO, java.util.ArrayList" %>
- <%@ page session="false" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>뉴스 게시판</title>
-</head>
-<body>
 <style>
 body {
 	text-align:center;
@@ -51,12 +47,10 @@ select {
 	height: 25px; 
 } 
 </style>
+</head>
 <body><div id="view_div">
-<% 
-	ArrayList<NewsVO> list = (ArrayList<NewsVO>)request.getAttribute("list"); 
-	if(list != null) {
-%>
 <h1>뉴스 게시판</h1>
+<c:if test='${!empty list}'>
 <table>
 	<tr>
 		<th>번호</th>
@@ -65,28 +59,23 @@ select {
 		<th>작성일</th>
 		<th>조회수</th>
 	</tr>
-<%
-	for(NewsVO vo : list) {
-%>
+<c:forEach var="vo" items="${list}">
 	<tr>
-		<td class='<%=vo.getId() %>'><%= vo.getId() %></td>
-		<%-- <td onclick="displayUpdateForm('<%=vo.getId()%>')"><%=vo.getTitle() %></td> --%>
- 		<td class='<%=vo.getId() %>'>
-		<a href="/springnews/news?select=true&id=<%=vo.getId()%>&title=<%=vo.getTitle()%>
-		&writer=<%=vo.getWriter()%>&content=<%=vo.getContent()%>"><%= vo.getTitle() %></a></td>
-		<td class='<%=vo.getId() %>'>
-		<a href="/springnews/news?action=listwriter&listwriter=<%=vo.getWriter()%>"><%= vo.getWriter() %></a></td>
-		<td class='<%=vo.getId() %>'><%= vo.getWritedate() %></td>
-		<td class='<%=vo.getId() %>'><%= vo.getCnt() %></td>
-		<td style="display:none" class='<%=vo.getId() %>'><%= vo.getContent() %></td>		
+		<td class='${vo.id}'>${vo.id}</td>
+		<%-- <td onclick="displayUpdateForm('${vo.id}')">${vo.title }</td> --%>
+ 		<td class='${vo.id}'>
+		<a href="/springnews/news?select=true&id=${vo.id}&title=${vo.title}
+		&writer=${vo.writer}&content=${vo.content}">${vo.title}</a></td>
+		<td class='${vo.id}'>
+		<a href="/springnews/news?action=listwriter&listwriter=${vo.writer}">${vo.writer}</a></td>
+		<td class='${vo.id}'>${vo.writedate}</td>
+		<td class='${vo.id}'>${vo.cnt}</td>
+		<td style="display:none" class='${vo.id}'>${vo.content}</td>		
 	</tr>
-<%
-		}
-%>
+	</c:forEach>
 </table>
-<%
-	}
-%>
+</c:if>
+
 </div>
 <form method="GET" action="/springnews/news">
 <input type="hidden" name="action" value="search">
@@ -119,35 +108,30 @@ select {
 	</form>
 </div>
 
-<%
-	if(request.getParameter("select") != null) {
-%>
-
+<c:if test='${!empty vo }'>
 <div id="select">
 	<h2>뉴스 내용</h2>
 	<form method="POST" action="/springnews/news">
-		<input type="hidden" name="action" value='<%= request.getParameter("id")%>'>
+		<input type="hidden" name="action" value='${vo.id}'>
 		<br>
-		<input type="text" name="writer" value='<%=request.getParameter("writer")%>'>
+		<input type="text" name="writer" value='${vo.writer }'>
 		<br>	
-		<input type="text" name="title"	value='<%=request.getParameter("title")%>'>
+		<input type="text" name="title"	value='${vo.title }'>
 		<br>	
 		<textarea name="content">
-			<%= request.getParameter("content") %>
+			${vo.content }
 		</textarea>
 		<br>
 		<input id="first" type="button" value="확인" onclick="selectNews(null)">
 		<input id="second" type="submit" value="수정">
-		<input id="third" type="button" value="삭제" onclick="selectNews(<%=request.getParameter("id")%>)">
+		<input id="third" type="button" value="삭제" onclick="selectNews(${vo.id})">
 	</form>
 </div>
-<%
-	}
-%>
+</c:if>
 <script>
-function displayUpdateForm(cv){
+/* function displayUpdateForm(cv){
 	location.href='/springnews/news?action=select&id='+cv;
-}
+} */
 function display(type) {
 	 if(type == 1) 
 		document.getElementById("write").style.display='block';		
@@ -177,7 +161,6 @@ function writeNews() {
 }
 
 function selectNews(cv) {
-	var doms = document.getElementsByClassName(cv);
 	if(cv == null) {
 		document.getElementById("select").style.display='none';
 	} else {

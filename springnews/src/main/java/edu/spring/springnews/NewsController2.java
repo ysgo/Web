@@ -14,6 +14,7 @@ import vo.NewsVO;
 public class NewsController2 {
 	@Autowired
 	private NewsDAO dao;
+	
 
 	@RequestMapping(value = "/news2")
 	public ModelAndView newsMain(NewsVO vo, String search, String action, String searchType) {
@@ -53,6 +54,9 @@ public class NewsController2 {
 				} else {
 					mav.addObject("msg", "검색된 결과가 없습니다");
 				}
+			} else if(action.equals("select")) {
+				NewsVO list = dao.listOne(vo.getId());
+				mav.addObject("list", list);
 			}
 		} else {
 			List<NewsVO> list = dao.listAll();
