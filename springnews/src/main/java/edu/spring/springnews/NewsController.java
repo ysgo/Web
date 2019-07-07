@@ -19,10 +19,10 @@ public class NewsController {
 	public ModelAndView newsMain(NewsVO vo, String id, String search,
 			String listwriter, String action, String searchType) {
 		ModelAndView mav = new ModelAndView();
+		System.out.println(action);
 		if (action != null) {
 			if (id != null && action.equals("delete")) {
 				boolean result = dao.delete(vo.getId());
-				System.out.println(result);
 				if (result) {
 					mav.addObject("msg", "삭제완료");
 				} else {
@@ -30,10 +30,10 @@ public class NewsController {
 				}
 				mav.addObject("list", dao.listAll());
 			} else if (action.equals("search")) {
-				System.out.println("search ok? " + search + " " + searchType);
+//				System.out.println("search ok? " + search + " " + searchType);
 				mav.addObject("list", dao.search(search, searchType));
 			} else if (action.equals("listwriter")) {
-				System.out.println("ok? " + listwriter);
+//				System.out.println("ok? " + listwriter);
 				mav.addObject("list", dao.listWriter(listwriter));
 			} else if (action.equals("insert")) {
 				boolean result = dao.insert(vo);
@@ -43,13 +43,17 @@ public class NewsController {
 					mav.addObject("msg", vo.getWriter() + "실패");
 				}
 				mav.addObject("list", dao.listAll());
+			} else if(action.equals("select")) {
+				NewsVO selectVO = dao.listOne(vo.getId());
+				mav.addObject("vo", selectVO);
+				mav.addObject("list", dao.listAll());
 			} else {
 				vo.setId(Integer.parseInt(action));
 				boolean result = dao.update(vo);
 				if (result) {
-					mav.addObject("msg", vo.getWriter() + "성공");
+					mav.addObject("msg", "수정 성공");
 				} else {
-					mav.addObject("msg", vo.getWriter() + "실패.");
+					mav.addObject("msg", "수정 실패");
 				}
 				mav.addObject("list", dao.listAll());
 			}			
