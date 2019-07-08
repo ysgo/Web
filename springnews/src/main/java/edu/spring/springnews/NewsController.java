@@ -19,7 +19,7 @@ public class NewsController {
 	public ModelAndView newsMain(NewsVO vo, String id, String search,
 			String listwriter, String action, String searchType) {
 		ModelAndView mav = new ModelAndView();
-		System.out.println(action);
+//		System.out.println(action);
 		if (action != null) {
 			if (id != null && action.equals("delete")) {
 				boolean result = dao.delete(vo.getId());
@@ -43,11 +43,16 @@ public class NewsController {
 					mav.addObject("msg", vo.getWriter() + "실패");
 				}
 				mav.addObject("list", dao.listAll());
-			} else if(action.equals("select")) {
+			}
+			else if(action.equals("select")) {
 				NewsVO selectVO = dao.listOne(vo.getId());
 				mav.addObject("vo", selectVO);
+				if (id != null) {
+					dao.update(dao.listOne(Integer.parseInt(id)));
+				}
 				mav.addObject("list", dao.listAll());
-			} else {
+			}
+		else {
 				vo.setId(Integer.parseInt(action));
 				boolean result = dao.update(vo);
 				if (result) {
