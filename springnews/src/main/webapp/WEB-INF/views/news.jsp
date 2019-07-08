@@ -62,10 +62,10 @@ select {
 <c:forEach var="vo" items="${list}">
 	<tr>
 		<td class='${vo.id}'>${vo.id}</td>
-		<%-- <td onclick="displayUpdateForm('${vo.id}')">${vo.title }</td> --%>
- 		<td class='${vo.id}'>
+		<td onclick="displayUpdateForm('${vo.id}')">${vo.title }</td>
+ 		<%-- <td class='${vo.id}'>
 		<a href="/springnews/news?select=true&id=${vo.id}&title=${vo.title}
-		&writer=${vo.writer}&content=${vo.content}">${vo.title}</a></td>
+		&writer=${vo.writer}&content=${vo.content}">${vo.title}</a></td> --%>
 		<td class='${vo.id}'>
 		<a href="/springnews/news?action=listwriter&listwriter=${vo.writer}">${vo.writer}</a></td>
 		<td class='${vo.id}'>${vo.writedate}</td>
@@ -129,9 +129,9 @@ select {
 </div>
 </c:if>
 <script>
-/* function displayUpdateForm(cv){
+function displayUpdateForm(cv){
 	location.href='/springnews/news?action=select&id='+cv;
-} */
+}
 function display(type) {
 	 if(type == 1) 
 		document.getElementById("write").style.display='block';		
