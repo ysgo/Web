@@ -1,90 +1,105 @@
 package com.spring.mybooktest;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import service.MemberService;
 import vo.MemberVO;
 
 @Controller
-@RequestMapping("/member")
 public class MemberController {
-
-	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
 	@Inject
-	MemberService service;
-	
+	private MemberService service;
 	@Autowired
-	BCryptPasswordEncoder passEncoder;  // 비밀번호 암호화
-			
-	// 회원 가입 get
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public void getSignup() throws Exception {
-		logger.info("get signup");
+	BCryptPasswordEncoder passEncoder;
+	
+	// main 페이지 이동
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String main() {
+		return "main";
 	}
 	
-	// 회원 가입 post
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String postSignup(MemberVO vo) throws Exception {
-		logger.info("post signup");
-			
-		String inputPass = vo.getUserPass();
-		String pass = passEncoder.encode(inputPass);  // 비밀번호를 암호화
-		vo.setUserPass(pass);  // 암호화된 비밀번호를 userPass에 저장
-	
-		service.signup(vo);
-	
-		return "redirect:/";
-	}		
-		
-	// 로그인  get
+	// 로그인 페이지 이동
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public void getSignin() throws Exception {
-		logger.info("get signin");
+	public String signin() {
+		return "signin";
 	}
 	
-	// 로그인 post
-	@RequestMapping(value = "/signin", method = RequestMethod.POST)
-	public String postSignin(MemberVO vo, HttpServletRequest req, RedirectAttributes rttr) throws Exception {
-		logger.info("post signin");
-				
-		MemberVO login = service.signin(vo);  // MemverVO형 변수 login에 로그인 정보를 저장
-		HttpSession session = req.getSession();  // 현재 세션 정보를 가져옴
-		
-		boolean passMatch = passEncoder.matches(vo.getUserPass(), login.getUserPass());  // DB의 비밀번호와 입력된 비밀번호를 비교
-		
-		if(login != null && passMatch) {  // 아이디가 존재하고(!=null), 비밀번호가 맞으면(PassMatch = true) 
-			session.setAttribute("member", login);  // member 세션에 로그인 정보를 부여
-			
-		} else {  // 아이디가 존재하지 않고, 비밀번호가 틀리면
-			session.setAttribute("member", null);  // member 세션에 null 부여  
-			rttr.addFlashAttribute("msg", false);  // 1회성인 변수인 msg에 false 부여
-			return "redirect:/member/signin";  // 로그인 화면으로 이동
-		}		
-		
+	// 회원가입 페이지 이동
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
+	public String signup() {
+		return "signup";
+	}
+	
+	// 회원가입 : 암호화 저장 후 서비스 객체에 저장
+	@RequestMapping(value="/signup", method=RequestMethod.POST)
+	public ModelAndView signUp(MemberVO vo, String rePass) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		String inputPass = vo.getUserPass();
+		String secPass = null;
+		if(inputPass == null || !(inputPass.equals(rePass))) {
+			mav.setViewName("signup");
+			return mav;
+		}
+		secPass = passEncoder.encode(inputPass);	// 비밀번호를 암호화
+		vo.setUserPass(secPass); // 암호화된 비밀번호를 secPass에 저장
+		if(service.signup(vo)) {
+			mav.addObject("msg", "회원가입 성공");
+		} else {
+			mav.addObject("msg", "가입 실패");
+		}
+		mav.setViewName("main");
+		return mav;
+	}
+	
+	// 로그인 : 객체 정보를 추출해 세션에 저장, 비교후 이동
+	@RequestMapping(value="/signin", method=RequestMethod.POST)
+	public ModelAndView signIn(@ModelAttribute MemberVO vo, HttpSession session) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		boolean result = service.loginCheck(vo, session);
+		if(result) {
+			mav.addObject("msg", "success");
+			mav.setViewName("main");
+		} else {
+			mav.addObject("msg", "fail");
+			mav.setViewName("signin");
+		}
+		return mav;
+//		MemberVO login = service.signin(vo);	// MemverVO형 변수 login에 로그인 정보를 저장
+//		HttpSession session = req.getSession();  // 현재 세션 정보를 가져옴
+//		// DB의 비밀번호와 입력된 비밀번호를 비교
+//		boolean passMatch = passEncoder.matches(vo.getUserPass(), login.getUserPass());
+//		System.out.println("test3");
+//		if(login != null && passMatch) {
+//			// 멤버세션 정보 부여
+//			session.setAttribute("member", login);
+//		} else { 		// 아이디 없고, 비밀번호 틀릴경우
+//			session.setAttribute("member", null);  // member 세션에 null 부여  
+//			rttr.addFlashAttribute("msg", false);  // 1회성인 변수인 msg에 false 부여
+//			return "redirect:/signin";  // 로그인 화면으로 이동
+//		}
+//		return "redirect:/";
+	}
+	
+	// 로그아웃 
+	@RequestMapping(value="/signout", method=RequestMethod.GET)
+	public String signOut(HttpSession session) throws Exception {
+		/*
+		 ModelAndView mav = new ModelAndView();
+		 service.logout(session);
+		 mav.setView("signin");
+		 mav.addObject("msg", "logout");
+		 return mav; 
+		 */
+		service.signout(session);	// 세션 정보 제거
 		return "redirect:/";
 	}
-			
-	// 로그아웃
-	@RequestMapping(value = "/signout", method = RequestMethod.GET)
-	public String signout(HttpSession session) throws Exception {
-		logger.info("get logout");
-		
-		service.signout(session);  // 세션 정보를 제거
-				
-		return "redirect:/";
-	}
-		
-		
 }
