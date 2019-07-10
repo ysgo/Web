@@ -41,16 +41,16 @@ public class MemberController {
 	
 	// 회원가입 : 암호화 저장 후 서비스 객체에 저장
 	@RequestMapping(value="/signup", method=RequestMethod.POST)
-	public ModelAndView signUp(MemberVO vo, String rePass) throws Exception {
+	public ModelAndView signUp(MemberVO vo) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		String inputPass = vo.getUserPass();
-		String secPass = null;
-		if(inputPass == null || !(inputPass.equals(rePass))) {
+//		String secPass = null;
+		if(inputPass == null || !(inputPass.equals(vo.getUserPass()))) {
 			mav.setViewName("signup");
 			return mav;
 		}
-		secPass = passEncoder.encode(inputPass);	// 비밀번호를 암호화
-		vo.setUserPass(secPass); // 암호화된 비밀번호를 secPass에 저장
+//		secPass = passEncoder.encode(inputPass);	// 비밀번호를 암호화
+//		vo.setUserPass(secPass); // 암호화된 비밀번호를 secPass에 저장
 		if(service.signup(vo)) {
 			mav.addObject("msg", "회원가입 성공");
 		} else {

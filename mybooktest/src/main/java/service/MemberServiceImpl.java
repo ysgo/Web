@@ -40,6 +40,7 @@ public class MemberServiceImpl implements MemberService {
 			// 세션 등록
 			session.setAttribute("userId", vo2.getUserId());
 			session.setAttribute("userPass", vo2.getUserPass());
+			return result;
 		}
 		return false;
 	}
