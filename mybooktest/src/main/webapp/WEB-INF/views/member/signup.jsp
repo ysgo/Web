@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-	<title>kubg</title>
+	<title>회원가입</title>
 </head>
 <body>
 <div id="root">
