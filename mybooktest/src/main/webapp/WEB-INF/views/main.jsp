@@ -37,24 +37,64 @@
     <a class="p-2 text-dark" href="#">내 정보</a>
   </nav>
   <nav class="my-2 my-md-0 mr-md-3">
-  <a class="btn btn-outline-primary" href="/mybooktest/signin?action=signin&id=2">로그인</a>
-  <a class="btn btn-outline-primary" href="/mybooktest/signup?action=signup&id=1">회원가입</a>
+	<c:if test="${empty msg }">
+  		<a class="btn btn-outline-primary" href="/mybooktest/signin?action=signin&id=2">로그인</a>
+  		<a class="btn btn-outline-primary" href="/mybooktest/signup?action=signup&id=1">회원가입</a>
+	</c:if>
+	<c:if test="${!empty msg }">
+  		<a class="btn btn-outline-primary" href="/mybooktest/signout">로그아웃</a>
+	</c:if>
   </nav>
-</div>
-<div>
-	<c:if test="${!empty member}">
-			<ul>
-				<li>
-					${member.userName }님 환영합니다
-				</li> 
-				<li>
-					<a href="/mybooktest/signout">로그아웃</a>
-				</li> 
-			</ul>
-		</c:if>
+	<%-- <div id = "wrap">
+        <p>
+            <button class="btn btn-success" onclick="changeView(0)">HOME</button>
+        <c:if test="${empty sessionID }">
+        <%
+            // 로그인 안되었을 경우 - 로그인, 회원가입 버튼을 보여준다.
+            if(session.getAttribute("sessionID")==null){ 
+        %>
+            <button id="loginBtn" class="btn btn-primary" onclick="changeView(1)">로그인</button>
+            <button id="joinBtn" class="btn btn-primary" onclick="changeView(2)">회원가입</button>
+        
+        </c:if>    
+        <%
+        
+            // 로그인 되었을 경우 - 로그아웃, 내정보 버튼을 보여준다.
+            }else{ 
+        %>
+        <c:if test="${!empty sessionID }">
+            <button id="logoutBtn" class="btn btn-primary" onclick="changeView(3)">로그아웃</button>
+            <button id="updateBtn" class="btn btn-primary" onclick="changeView(4)">내정보</button>
+        <%    }    %>    
+ 		</c:if>
+            <button id="memberViewBtn" class="btn btn-warning">회원보기</button>
+        </p>
+    </div> --%>
 </div>
 <script>
-	
-</script>
+        /* function changeView(value){
+            
+            if(value == "0") // HOME 버튼 클릭시 첫화면으로 이동
+            {
+                location.href="/mybooktest/";
+            }
+            else if(value == "1") // 로그인 버튼 클릭시 로그인 화면으로 이동
+            {
+                location.href="/mybooktest/signin";
+            }
+            else if(value == "2") // 회원가입 버튼 클릭시 회원가입 화면으로 이동
+            {
+                location.href="/mybooktest/signup";
+            }
+            else if(value == "3") // 로그아웃 버튼 클릭시 로그아웃 처리
+            {
+                location.href="/mybooktest/signout";
+            }
+            else if(value == "4") // 내정보 버튼 클릭시 회원정보 보여주는 화면으로 이동
+            {
+                location.href="/mybooktest/mylibrary";
+            }
+        } */
+    </script>
 </body>
 </html>
