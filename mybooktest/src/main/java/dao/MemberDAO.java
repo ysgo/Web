@@ -18,4 +18,6 @@ public interface MemberDAO {
 	public MemberVO viewMember(MemberVO vo);
 	// 회원 로그아웃
 	public void logout(HttpSession session);
+	
+	public int checkOverId(String userId);
 }

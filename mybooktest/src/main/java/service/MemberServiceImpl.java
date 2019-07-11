@@ -13,6 +13,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Inject
 	private MemberDAO dao;
+	
+//	@Autowired
+//	private SqlSessionTemplate userSqlSessin;
 
 	// 회원 가입
 	@Override 
@@ -48,5 +51,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberVO viewMember(MemberVO vo) {
 		return dao.viewMember(vo);
+	}
+	
+	// 중복 아이디 체크
+	public int userIdCheck(String userId) {
+//		dao = userSqlSessin.getMapper(MemberDAO.class);
+		return dao.checkOverId(userId);
 	}
 } 

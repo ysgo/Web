@@ -20,5 +20,5 @@ public interface MemberService {
 	// 로그인 정보
 	public MemberVO viewMember(MemberVO vo);
 	
-	
+	public int userIdCheck(String userId);
 }

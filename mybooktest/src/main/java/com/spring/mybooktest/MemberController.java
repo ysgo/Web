@@ -52,9 +52,9 @@ public class MemberController {
 //		secPass = passEncoder.encode(inputPass);	// 비밀번호를 암호화
 //		vo.setUserPass(secPass); // 암호화된 비밀번호를 secPass에 저장
 		if(service.signup(vo)) {
-			mav.addObject("msg", "회원가입 성공");
+			mav.addObject("status", "회원가입 성공");
 		} else {
-			mav.addObject("msg", "가입 실패");
+			mav.addObject("status", "가입 실패");
 		}
 		mav.setViewName("main");
 		return mav;
@@ -66,10 +66,10 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		boolean result = service.loginCheck(vo, session);
 		if(result) {
-			mav.addObject("msg", "success");
+			mav.addObject("status", "success");
 			mav.setViewName("main");
 		} else {
-			mav.addObject("msg", "fail");
+			mav.addObject("status", "fail");
 			mav.setViewName("signin");
 		}
 		return mav;

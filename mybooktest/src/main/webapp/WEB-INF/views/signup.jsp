@@ -28,22 +28,27 @@
                         <form action="/mybooktest/signup" method="POST" class="register-form" id="register-form" autocomplete="off">
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="userName" id="userName" placeholder="Your Name"/>
+                                <input required type="text" name="userName" id="userName" placeholder="Your Name"/>
+                            	<span class="check_font" id="name_check"></span>
                             </div>
                             <div class="form-group">
                                 <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                <input type="email" name="userId" id="userId" placeholder="Your Email"/>
+                                <input required type="email" name="userId" id="userId" placeholder="Your Email"/>
+                                <span class="check_font" id="id_check"></span>
                             </div>
                             <div class="form-group">
                                 <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="userPass" id="userPass" placeholder="Password"/>
+                                <input required type="password" name="userPass" id="userPass" placeholder="Password"/>
+                            	<span class="check_font" id="pass_check"></span>
                             </div>
                             <div class="form-group">
                                 <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                <input type="password" name="rePass" id="rePass" placeholder="Repeat your password"/>
+                                <input required type="password" name="rePass" id="rePass" placeholder="Repeat your password"/>
+                            	<span class="check_font" id="repass_check"></span>
                             </div>
                             <div class="form-group form-button">
                                 <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                                <p id="checkPass"></p>
                             </div>
                         </form>
                     </div>
@@ -56,5 +61,119 @@
             </div>
         </section>
 	</div>
+<script>
+//모든 공백 체크 정규식
+var empJ = /\s/g;	
+// 비밀번호 정규식 : A~Z, a~z,,0~9로 시작하는 4~12자리 비밀번호 가능
+var pwJ = /^[A-Za-z0-9]{4,16}$/;
+// 이름 정규식 : 가~힣, 한글로 이루어진 문자만으로 2~6자리 이름을 적어야한다
+var nameJ = /^[가-힣a-zA-z]{2,6}$/;
+// 이메일 검사 정규식 : -_특수문자 가능하며 중앙에 @ 필수 그리고 . 뒤에 2~3글자 필요
+var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+// 공백일 경우 체크 정규식
+
+
+// 이름 정규식(한글로만 2~6자리 또는 특수문자 안됨)
+$("#userName").blur(function() {
+	if(nameJ.test($("#userName").val())) {
+		$("#name_check").text("사용가능합니다.");
+		$("#signup").attr("disabled", false);
+	} else {
+		$("#name_check").text("한글로만 2~6자리 입력가능합니다.");
+		$("#name_check").css("color", "red");
+		$("#signup").attr("disabled", true);
+	}
+});
+
+// 비밀번호 유효성 검사(숫자, 문자로만 4~12자리)
+$("#userPass").blur(function() {
+	if(pwJ.test($("#userPass").val())) {
+		$("#pass_check").text("사용가능합니다.");
+		$("#signup").attr("disabled", false);
+	} else {
+		$("#pass_check").text("숫자 또는 문자로만 4~12자리 입력가능합니다.");
+		$("#pass_check").css("color", "red");
+		$("#signup").attr("disabled", true);
+	}
+});
+
+// 비밀번호 재확인
+$("#rePass").blur(function() {
+	var userPass = document.getElementById("userPass").value;
+	var rePass = document.getElementById("rePass").value;
+	console.log(userPass);
+	console.log(rePass);
+	if(userPass != rePass) {
+		$("#repass_check").text("비밀번호가 일치하지 않습니다.");
+		$("#repass_check").css("color", "red");
+		$("#signup").attr("disabled", true);
+	} else {
+		$("#repass_check").text("비밀번호가 일치합니다.");
+		$("#signup").attr("disabled", false);		
+	}
+});
+
+//아이디 유효성 검사(1 = 중복 / 0 != 중복)
+$("#userId").blur(function() {						
+	// id = "id_reg" / name = "userId"
+	var user_id = $('#userId').val();
+	$.ajax({
+		url : '/mybooktest/idCheck?userId='+ user_id,
+		type : 'get',
+		success : function(data) {			
+			if (data == 1) {	// 1 : 아이디가 중복되는 문구
+					$("#id_check").text("이미 가입된 이메일입니다.");
+					$("#id_check").css("color", "red");
+					$("#signup").attr("disabled", true);
+				} else {		// 0 : 아이디 길이 / 문자열 검사					
+					if(mailJ.test(user_id)){
+						$("#id_check").text("사용 가능합니다.");
+						$("#signup").attr("disabled", false);			
+					} else if(user_id == ""){						
+						$('#id_check').text('아이디를 입력해주세요.');
+						$('#id_check').css('color', 'red');
+						$("#signup").attr("disabled", true);					
+					} else {						
+						$('#id_check').text("유효햐지 않은 양식입니다.");
+						$('#id_check').css('color', 'red');
+						$("#signup").attr("disabled", true);
+					}
+					
+				}
+			}, error : function() {
+					console.log("실패");
+			}
+		});
+	});
+
+/* function idCheck() {
+	var id = $('#userId').val();
+	$.ajax({
+        url:'/idDuplChk.do',
+        type:'post',
+        data:{id:id},
+        success:function(data){
+            if($.trim(data)==0){
+                $('#chkMsg').html("사용가능");                
+            }else{
+                $('#chkMsg').html("사용불가");
+            }
+        },
+        error:function(){
+                alert("에러입니다");
+        }
+    });
+} */
+
+/* function passCheck() {
+	var pw = document.getElementById("userPass").value;
+	var rePw = document.getElementById("rePass").value;
+	if(pw != rePw) {
+		document.getElementById("checkPass").innerHTML = "비밀번호가 틀렸습니다. 다시 입력해주세요";
+		return false;
+	}
+} */
+</script>
 </body>
 </html>
