@@ -47,7 +47,13 @@ public class MemberDAOImpl implements MemberDAO {
 	// 회원 로그아웃
 	@Override
 	public void logout(HttpSession session) {
-		
+	}
+	// 회원가입 아이디 체크
+	@Override
+	public int checkOverId(String userId) {
+		String statement = "resource.MemberMapper.checkOverId";
+		return session.selectOne(statement,	userId);
 	}
 
+	
 }
