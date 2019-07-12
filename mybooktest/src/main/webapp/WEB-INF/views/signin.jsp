@@ -45,14 +45,16 @@
     </label>
   </div>
   <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
-  <!-- 아이디, 비밀번호 찾기 -->
-  <button id="searchId" class="btn btn-lg btn-primary btn-block" type="button" data-toggle="modal" data-target="#myModal">아이디찾기</button>
-  <button id="seasrchPass" class="btn btn-lg btn-primary btn-block" type="button" data-toggle="modal" data-target="#myModal">비밀번호찾기</button>
+  
   </div>
-  <p class="mt-5 mb-3 text-muted">아직 회원가입을 안하셨나요? <a href="/mybooktest/signup?action=signup&id=2">회원가입</a></p>
 </form>
-
-<!-- 아이디, 비밀번호 찾기 모달 -->
+<br> 
+  <!-- 아이디, 비밀번호 찾기 -->
+  <button id="searchId" class="btn btn-lg btn-primary btn-block" onclick="search(userId)">아이디 찾기</button>
+  <button id="searchId" class="btn btn-lg btn-primary btn-block"  data-toggle="modal" data-target="#myModal">아이디 찾기 모달</button>
+  <button id="searchPass" class="btn btn-lg btn-primary btn-block" onclick="search(userPass)">비밀번호 찾기</button>
+  
+  <!-- 책 추가 모달 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="max-width: 100%; width: auto; display: table;">
     <div class="modal-content">
@@ -60,41 +62,34 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 	 
 	 <div class="modal-body">
+	 	
 	 	<!--  모달 컨텐트 컨테이너 -->     	
 	 	<div class="container">
 	 		<!--  인풋 로우 -->   
 			<div class="row inputrow">
 				<div class="col-sm-12  ">
-					<div class="input-group">
+					<form class="input-group" action="/mybooktest/searchId" method="GET">					
 			        	<input name="keyword" type="text" class="form-control" 
-				        	placeholder="아이디 검색" aria-describedby="basic-addon2" width="20px">
+				        	placeholder="닉네임 검색" aria-describedby="basic-addon2" width="20px">
 			        	 <div class="input-group-append">
-			    			<button class="btn btn-outline-secondary" id="submitForm">찾기</button>
+			    			<button class="btn btn-outline-secondary" id="submitForm">검색</button>
 			 			 </div>
-				     </div>
-				</div>
-			</div>
-
-	       <br>
-<%-- 	       <!--  결과 로우 -->   
-	        <c:forEach items="${bookList}" var ="b">
+				     </form>
+	       <!--  결과 로우 bookList는 List 타입-->   
+<%-- 	        <c:forEach items="${searchId}" var ="b">
 	        
-	        		<div class="row">
-	        		<div id="imgContainer" class="col-2 col-sm-2">
-	                	<img src="${b.image}">
-		            </div>
+	        		<div class="row">x
 		            <div class="col-2 col-sm-3">
-		            	${b.title}<br>
-		                ${b.author}<br>
-		                ${b.publisher}
-		            </div>
-		             <div class="col-6 col-md-7">
-		                ${b.description}
+		            	${b.userId}
 		            </div>
 		            <div class="w-150"></div>
 	        	</div>
 	 
-	        </c:forEach>--%>
+	        </c:forEach> --%>
+				</div>
+			</div>
+
+	       <br>
 			
 			</div>
         	<!--  모달 컨텐트 컨테이너 끝 -->
@@ -103,9 +98,18 @@
     </div>
   </div>
 </div>
-<!-- 아이디,비밀번호 찾기 모달 끝 -->
+<!-- 책 추가 모달 끝 -->
+  <p class="mt-5 mb-3 text-muted">아직 회원가입을 안하셨나요? <a href="/mybooktest/signup?action=signup&id=2">회원가입</a></p>
 
 <script>
+ function search(cv) {
+	if(cv == userId) {	// 아이디 찾기
+		window.open("/mybooktest/searchId", "아이디 찾기", "width=400, height=300, left=100, top=50");
+	} else {	// 비밀번호 찾기
+		window.open("/mybooktest/searchPass", "비밀번호 찾기", "width=400, height=300, left=100, top=50");
+	}
+} 
+
 //이메일아이디 검사 정규식 : -_특수문자 가능하며 중앙에 @ 필수 그리고 . 뒤에 2~3글자 필요
 var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 /* String regexp = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; //이메일 정규 표현식 */
@@ -170,6 +174,37 @@ $(function(){
         });
     });   
 });
+
+function searchFunc(e) {  
+	var keyword = $('input[name=keyword]').val();
+
+    var url = "bookList.do?keyword=" + keyword;
+    if(e.type == "keydown" && e.keyCode != 13) { return; } 
+    
+    $.ajax({
+        url: url,
+        type: 'GET', 
+        success: function(data){
+        	$('body').html(data);
+            $('#myModal').modal('show'); 
+        }
+    });
+}
+
+$(function(){
+    $('#submitForm').on('click', searchFunc);   
+    $('input[name=keyword]').on('keydown', searchFunc);   
+    $('.close').on('click', function() {
+    	$.ajax({
+            url: "bookList.do",
+            type: 'GET', 
+            success: function(data){
+            	$('body').html(data);
+            }
+        });
+    });   
+});
+
 </script>
 </body>
 </html>
