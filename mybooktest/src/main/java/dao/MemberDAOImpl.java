@@ -1,10 +1,10 @@
 package dao;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.support.SessionStatus;
 
 import vo.MemberVO;
 
@@ -23,14 +23,15 @@ public class MemberDAOImpl implements MemberDAO {
 		return result;
 	}
 	
-	// 로그인
-	@Override
-	public MemberVO signin(MemberVO vo) throws Exception {
-		MemberVO loginVO = null;
-		String statement = "resource.MemberMapper.signin";
-		loginVO = session.selectOne(statement, vo);
-		return loginVO;
-	}
+//	// 로그인
+//	@Override
+//	public MemberVO signin(MemberVO vo) throws Exception {
+//		MemberVO loginVO = null;
+//		String statement = "resource.MemberMapper.signin";
+//		loginVO = session.selectOne(statement, vo);
+//		return loginVO;
+//	}
+	
 	//로그인 체크
 	@Override
 	public boolean loginCheck(MemberVO vo) {
@@ -38,16 +39,14 @@ public class MemberDAOImpl implements MemberDAO {
 		String name = session.selectOne(statement, vo);
 		return (name == null)? false : true;
 	}
+	
 	// 회원 로그인 정보
 	@Override
 	public MemberVO viewMember(MemberVO vo) {
 		String statement = "resource.MemberMapper.viewMember";
 		return session.selectOne(statement, vo);
 	}
-	// 회원 로그아웃
-	@Override
-	public void logout(HttpSession session) {
-	}
+	
 	// 회원가입 아이디 체크
 	@Override
 	public int checkOverId(String userId) {
@@ -55,5 +54,9 @@ public class MemberDAOImpl implements MemberDAO {
 		return session.selectOne(statement,	userId);
 	}
 
-	
+	// 회원 로그아웃
+	@Override
+	public void signout(SessionStatus session) {
+		session.setComplete();
+	}	
 }

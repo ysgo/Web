@@ -45,37 +45,130 @@
     </label>
   </div>
   <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
+  <!-- 아이디, 비밀번호 찾기 -->
+  <button id="searchId" class="btn btn-lg btn-primary btn-block" type="button" data-toggle="modal" data-target="#myModal">아이디찾기</button>
+  <button id="seasrchPass" class="btn btn-lg btn-primary btn-block" type="button" data-toggle="modal" data-target="#myModal">비밀번호찾기</button>
   </div>
   <p class="mt-5 mb-3 text-muted">아직 회원가입을 안하셨나요? <a href="/mybooktest/signup?action=signup&id=2">회원가입</a></p>
 </form>
+
+<!-- 아이디, 비밀번호 찾기 모달 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 100%; width: auto; display: table;">
+    <div class="modal-content">
+	<!-- 닫기 버튼 -->
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+	 
+	 <div class="modal-body">
+	 	<!--  모달 컨텐트 컨테이너 -->     	
+	 	<div class="container">
+	 		<!--  인풋 로우 -->   
+			<div class="row inputrow">
+				<div class="col-sm-12  ">
+					<div class="input-group">
+			        	<input name="keyword" type="text" class="form-control" 
+				        	placeholder="아이디 검색" aria-describedby="basic-addon2" width="20px">
+			        	 <div class="input-group-append">
+			    			<button class="btn btn-outline-secondary" id="submitForm">찾기</button>
+			 			 </div>
+				     </div>
+				</div>
+			</div>
+
+	       <br>
+<%-- 	       <!--  결과 로우 -->   
+	        <c:forEach items="${bookList}" var ="b">
+	        
+	        		<div class="row">
+	        		<div id="imgContainer" class="col-2 col-sm-2">
+	                	<img src="${b.image}">
+		            </div>
+		            <div class="col-2 col-sm-3">
+		            	${b.title}<br>
+		                ${b.author}<br>
+		                ${b.publisher}
+		            </div>
+		             <div class="col-6 col-md-7">
+		                ${b.description}
+		            </div>
+		            <div class="w-150"></div>
+	        	</div>
+	 
+	        </c:forEach>--%>
+			
+			</div>
+        	<!--  모달 컨텐트 컨테이너 끝 -->
+	 	
+	 </div>	
+    </div>
+  </div>
+</div>
+<!-- 아이디,비밀번호 찾기 모달 끝 -->
+
 <script>
 //이메일아이디 검사 정규식 : -_특수문자 가능하며 중앙에 @ 필수 그리고 . 뒤에 2~3글자 필요
 var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+/* String regexp = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; //이메일 정규 표현식 */
 //비밀번호 정규식 : A~Z, a~z,,0~9로 시작하는 4~12자리 비밀번호 가능
 var pwJ = /^[A-Za-z0-9]{4,16}$/;
-
+var text;
+var check;
 //이메일아이디 정규식
 $("#userId").blur(function() {
 	if(mailJ.test($("#userId").val())) {
-		$("#id_check").text("");
-		$("#signin").attr("disabled", false);
+		text="";
+		check=false;
 	} else {
-		$("#id_check").text("유효하지 않은 양식입니다.");
-		$("#id_check").css("color", "red");
-		$("#signin").attr("disabled", true);
+		text="유효하지 않은 양식입니다.";
+		check=true;
 	}
+		$("#id_check").text(text);
+		$("#id_check").css("color", "red");
+		$("#signin").attr("disabled", check);
 });
 
 //비밀번호 유효성 검사(숫자, 문자로만 4~12자리)
 $("#userPass").blur(function() {
 	if(pwJ.test($("#userPass").val())) {
-		$("#pass_check").text("");
-		$("#signin").attr("disabled", false);
+		text="";
+		check=false;
 	} else {
-		$("#pass_check").text("숫자 or 문자로만 4~12자리 입력");
-		$("#pass_check").css("color", "red");
-		$("#signin").attr("disabled", true);
+		text="숫자 or 문자로만 4~12자리 입력가능합니다.";
+		check=true;
 	}
+		$("#pass_check").text(text);
+		$("#pass_check").css("color", "red");
+		$("#signin").attr("disabled", check);
+});
+
+function searchFunc(e) {  
+	var keyword = $('input[name=keyword]').val();
+
+    var url = "bookList.do?keyword=" + keyword;
+    if(e.type == "keydown" && e.keyCode != 13) { return; } 
+    
+    $.ajax({
+        url: url,
+        type: 'GET', 
+        success: function(data){
+        	$('body').html(data);
+            $('#myModal').modal('show'); 
+        }
+    });
+}
+
+$(function(){
+    $('#submitForm').on('click', searchFunc);   
+    $('input[name=keyword]').on('keydown', searchFunc);   
+    $('.close').on('click', function() {
+    	$.ajax({
+            url: "bookList.do",
+            type: 'GET', 
+            success: function(data){
+            	$('body').html(data);
+            }
+        });
+    });   
 });
 </script>
 </body>

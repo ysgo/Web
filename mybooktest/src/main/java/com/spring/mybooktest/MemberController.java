@@ -6,15 +6,19 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.MemberService;
 import vo.MemberVO;
 
 @Controller
+@SessionAttributes("status")
 public class MemberController {
 	@Inject
 	private MemberService service;
@@ -62,14 +66,17 @@ public class MemberController {
 	
 	// 로그인 : 객체 정보를 추출해 세션에 저장, 비교후 이동
 	@RequestMapping(value="/signin", method=RequestMethod.POST)
-	public ModelAndView signIn(@ModelAttribute MemberVO vo, HttpSession session) throws Exception {
+	public ModelAndView signIn(@ModelAttribute MemberVO vo, HttpSession session, 
+			@CookieValue(value="userId", required=false) String userId) throws Exception {
+		System.out.println(userId);
 		ModelAndView mav = new ModelAndView();
+
 		boolean result = service.loginCheck(vo, session);
 		if(result) {
 			mav.addObject("status", "success");
 			mav.setViewName("main");
 		} else {
-			mav.addObject("status", "fail");
+			mav.addObject("status", null);
 			mav.setViewName("signin");
 		}
 		return mav;
@@ -91,15 +98,8 @@ public class MemberController {
 	
 	// 로그아웃 
 	@RequestMapping(value="/signout", method=RequestMethod.GET)
-	public String signOut(HttpSession session) throws Exception {
-		/*
-		 ModelAndView mav = new ModelAndView();
-		 service.logout(session);
-		 mav.setView("signin");
-		 mav.addObject("msg", "logout");
-		 return mav; 
-		 */
-		service.signout(session);	// 세션 정보 제거
+	public String signOut(SessionStatus session) throws Exception {
+		service.signout(session);
 		return "redirect:/";
 	}
 }

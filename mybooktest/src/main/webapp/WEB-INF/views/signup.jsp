@@ -62,56 +62,57 @@
         </section>
 	</div>
 <script>
-//모든 공백 체크 정규식
-var empJ = /\s/g;	
-// 비밀번호 정규식 : A~Z, a~z,,0~9로 시작하는 4~12자리 비밀번호 가능
-var pwJ = /^[A-Za-z0-9]{4,16}$/;
 // 이름 정규식 : 가~힣, 한글로 이루어진 문자만으로 2~6자리 이름을 적어야한다
 var nameJ = /^[가-힣a-zA-z]{2,6}$/;
 // 이메일 검사 정규식 : -_특수문자 가능하며 중앙에 @ 필수 그리고 . 뒤에 2~3글자 필요
 var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+// 비밀번호 정규식 : A~Z, a~z,,0~9로 시작하는 4~12자리 비밀번호 가능
+var pwJ = /^[A-Za-z0-9]{4,16}$/;
 
-// 공백일 경우 체크 정규식
-
-
+var text;
+var check;
 // 이름 정규식(한글로만 2~6자리 또는 특수문자 안됨)
 $("#userName").blur(function() {
 	if(nameJ.test($("#userName").val())) {
-		$("#name_check").text("사용가능합니다.");
-		$("#signup").attr("disabled", false);
+		text = "사용가능합니다";
+		check=false;
 	} else {
-		$("#name_check").text("한글로만 2~6자리 입력가능합니다.");
-		$("#name_check").css("color", "red");
-		$("#signup").attr("disabled", true);
+		text="한글과 영어로만 2~6자리 입력가능합니다.";
+		check=true;
 	}
+		$("#name_check").text(text);
+		$("#name_check").css("color", "red");
+		$("#signup").attr("disabled", check); 
 });
 
 // 비밀번호 유효성 검사(숫자, 문자로만 4~12자리)
 $("#userPass").blur(function() {
 	if(pwJ.test($("#userPass").val())) {
-		$("#pass_check").text("사용가능합니다.");
-		$("#signup").attr("disabled", false);
+		text = "사용가능합니다";
+		check=false;
 	} else {
-		$("#pass_check").text("숫자 또는 문자로만 4~12자리 입력가능합니다.");
-		$("#pass_check").css("color", "red");
-		$("#signup").attr("disabled", true);
+		text = "숫자 또는 문자로만 4~12자리 입력가능합니다.";
+		check=true;
 	}
+		$("#pass_check").text(text);
+		$("#pass_check").css("color", "red");
+		$("#signup").attr("disabled", check);
 });
 
 // 비밀번호 재확인
 $("#rePass").blur(function() {
 	var userPass = document.getElementById("userPass").value;
 	var rePass = document.getElementById("rePass").value;
-	console.log(userPass);
-	console.log(rePass);
 	if(userPass != rePass) {
-		$("#repass_check").text("비밀번호가 일치하지 않습니다.");
-		$("#repass_check").css("color", "red");
-		$("#signup").attr("disabled", true);
+		text = "비밀번호가 일치하지 않습니다.";
+		check=false;
 	} else {
-		$("#repass_check").text("비밀번호가 일치합니다.");
-		$("#signup").attr("disabled", false);		
+		text = "비밀번호가 일치합니다.";
+		check=true;
 	}
+		$("#repass_check").text(text);
+		$("#repass_check").css("color", "red");
+		$("#signup").attr("disabled", check);
 });
 
 //아이디 유효성 검사(1 = 중복 / 0 != 중복)
@@ -123,57 +124,28 @@ $("#userId").blur(function() {
 		type : 'get',
 		success : function(data) {			
 			if (data == 1) {	// 1 : 아이디가 중복되는 문구
-					$("#id_check").text("이미 가입된 이메일입니다.");
-					$("#id_check").css("color", "red");
-					$("#signup").attr("disabled", true);
-				} else {		// 0 : 아이디 길이 / 문자열 검사					
-					if(mailJ.test(user_id)){
-						$("#id_check").text("사용 가능합니다.");
-						$("#signup").attr("disabled", false);			
-					} else if(user_id == ""){						
-						$('#id_check').text('아이디를 입력해주세요.');
-						$('#id_check').css('color', 'red');
-						$("#signup").attr("disabled", true);					
-					} else {						
-						$('#id_check').text("유효햐지 않은 양식입니다.");
-						$('#id_check').css('color', 'red');
-						$("#signup").attr("disabled", true);
-					}
-					
-				}
-			}, error : function() {
-					console.log("실패");
+				text = "이미 가입된 이메일입니다.";
+				check=true;
+			} else {		// 0 : 아이디 길이 / 문자열 검사					
+				if(mailJ.test(user_id)){
+					text = "사용 가능합니다.";
+					check=false;			
+				} else if(user_id == ""){			
+					text = "아이디를 입력해주세요.";
+					check=true;					
+				} else {			
+					text = "유효하지 않은 양식입니다.";
+					check=true;
+				}	
 			}
-		});
+			$("#id_check").text(text);
+			$("#id_check").css("color", "red");
+			$("#signup").attr("disabled", check);
+		}, error : function() {
+				console.log("실패");
+		}
 	});
-
-/* function idCheck() {
-	var id = $('#userId').val();
-	$.ajax({
-        url:'/idDuplChk.do',
-        type:'post',
-        data:{id:id},
-        success:function(data){
-            if($.trim(data)==0){
-                $('#chkMsg').html("사용가능");                
-            }else{
-                $('#chkMsg').html("사용불가");
-            }
-        },
-        error:function(){
-                alert("에러입니다");
-        }
-    });
-} */
-
-/* function passCheck() {
-	var pw = document.getElementById("userPass").value;
-	var rePw = document.getElementById("rePass").value;
-	if(pw != rePw) {
-		document.getElementById("checkPass").innerHTML = "비밀번호가 틀렸습니다. 다시 입력해주세요";
-		return false;
-	}
-} */
+});
 </script>
 </body>
 </html>
