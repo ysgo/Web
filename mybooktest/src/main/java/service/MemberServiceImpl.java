@@ -1,39 +1,25 @@
 package service;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.support.SessionStatus;
 
 import dao.MemberDAO;
 import vo.MemberVO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
-
-	@Inject
+	@Autowired
 	private MemberDAO dao;
-	
-//	@Autowired
-//	private SqlSessionTemplate userSqlSessin;
 
 	// 회원 가입
 	@Override 
 	public boolean signup(MemberVO vo) throws Exception {
 		return dao.signup(vo);		
 	}
-	
-//	// 로그인
-//	@Override
-//	public MemberVO signin(MemberVO vo) throws Exception {
-//		return dao.signin(vo);
-//	}
 
-	// 로그아웃
-	@Override
-	public void signout(HttpSession session) throws Exception {
-		session.invalidate();  // 세션 정보를 제거
-	}
 	//회원 로그인 체크
 	@Override
 	public boolean loginCheck(MemberVO vo, HttpSession session) {
@@ -47,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return false;
 	}
+	
 	//회원 로그인 정보
 	@Override
 	public MemberVO viewMember(MemberVO vo) {
@@ -55,7 +42,12 @@ public class MemberServiceImpl implements MemberService {
 	
 	// 중복 아이디 체크
 	public int userIdCheck(String userId) {
-//		dao = userSqlSessin.getMapper(MemberDAO.class);
 		return dao.checkOverId(userId);
+	}
+	
+	// 로그아웃
+	@Override
+	public void signout(SessionStatus session) throws Exception {
+		dao.signout(session);
 	}
 } 
