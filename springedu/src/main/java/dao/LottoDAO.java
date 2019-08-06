@@ -1,5 +1,6 @@
 ﻿package dao;
 import java.util.Random;
+
 import org.springframework.stereotype.Repository;
 @Repository
 public class LottoDAO {
