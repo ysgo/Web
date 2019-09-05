@@ -63,6 +63,18 @@ public class RServeExample {
 		}
 		rc.close();
 	}
+	public static void getDataFrame2() throws RserveException, REXPMismatchException {
+		RConnection rc = new RConnection();
+		REXP x = rc.eval("imsi<-source('c:/Rstudy/test.R'); imsi$value");
+		RList list = x.asList();
+		
+		String pid = list.at("product").asString();
+		System.out.print("PID : " + pid);
+		
+		String clickcount = list.at("clickcount").asString();
+		System.out.println("\tCLICKCOUNT : " + clickcount);
+		rc.close();
+	}
 	public static void main(String[] args) throws REXPMismatchException, REngineException {
 		System.out.println("--------------- R 에서 버젼정보 가져오기 ------------------");
 		RServeExample.getString();
@@ -74,6 +86,7 @@ public class RServeExample {
 		RServeExample.getIntegers();
 		System.out.println("--------------- R 에서 데이터 생성(데이터 프레임) 연산후 가져오기 ------------------");
 		RServeExample.getDataFrame1();
-//		System.out.println("--------------- R 에서 정수 데이터들 가져오기 ------------------");
+		System.out.println("--------------- R 에서 정수 데이터들 가져오기 ------------------");
+		RServeExample.getDataFrame2();
 	}
 }
