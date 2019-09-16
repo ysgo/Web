@@ -29,4 +29,9 @@
 	<context:component-scan base-package="rtest" />
 	<context:component-scan base-package="service" />
 	
+	 <beans:bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <beans:property name="location" value="/WEB-INF/config/config.properties"/>
+        <beans:property name="fileEncoding" value="UTF-8" />
+    </beans:bean>
+
 </beans:beans>
